@@ -33,4 +33,17 @@ btn.image = button_img
 btn.place(width=50, height=70)
 btn.pack(expand=True, ipadx=10, ipady=10)
 
+frame = ttk.Frame(root, padding=10)
+frame.grid(row=0, column=0)
+
+for row in range(3):
+    for col in range(3):
+        btn = ttk.Button(frame, text=f"Btn {row}-{col}")
+        btn.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+
+# Spalten/Zeilen gleichmäßig verteilen
+for i in range(3):
+    frame.columnconfigure(i, weight=1)
+    frame.rowconfigure(i, weight=1)
+
 root.mainloop()
