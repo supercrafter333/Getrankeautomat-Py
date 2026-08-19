@@ -1,0 +1,20 @@
+{
+    "getraenke": [
+        {
+            "name": "Wasser",
+            "preis": 2.00
+        },
+        {
+            "name": "Cola",
+            "preis": 2.50
+        },
+        {
+            "name": "Fanta",
+            "preis": 2.50
+        },
+        {
+            "name": "placeholder",
+            "preis": 99.99
+        }
+    ]
+}
