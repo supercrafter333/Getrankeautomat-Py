@@ -32,8 +32,7 @@ Für einen Getränkeautomaten soll eine vollständige Steuerungssoftware inklusi
 
 ### 2.4 Datenexport / -import
 - Export der Daten als **CSV**-Datei.
-- Export der Daten als **JSON**-Datei.
-- Import von Daten aus CSV- und JSON-Dateien (z. B. zur Wiederherstellung oder Datenübernahme).
+- Import von Daten aus CSV-Dateien (z. B. zur Wiederherstellung oder Datenübernahme).
 
 ### 2.5 Wartung / Technikerfunktionen
 - Auffüllen des Getränkebestands durch Techniker.
