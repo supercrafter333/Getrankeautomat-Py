@@ -10,11 +10,13 @@
         },
         {
             "name": "Fanta",
-            "preis": 2.50
+            "preis": 2.50,
+            "pic": "img/cartoon-coffee.png"
         },
         {
             "name": "placeholder",
-            "preis": 99.99
+            "preis": 99.99,
+            "pic": "img/cartoon-coffee.png"
         }
     ]
 }
