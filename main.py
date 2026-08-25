@@ -40,42 +40,73 @@ def create_drink_buttons(getraenke):
         row = i // 3
         column = i % 3
 
-        image = load_image(getraenk.get("pic", "img/placeholder.png"))
-
-        button = ttk.Button(
-            frame,
-            text=f'{getraenk["name"]}\n{getraenk["preis"]:.2f} €',
-            width=30,
-            image=image,
-            compound=tk.TOP,
-            command=lambda: play_sound("yeah-yeah.wav")
+        image = load_image(
+            getraenk.get("pic", "img/placeholder.png")
         )
 
-        button.image = image
-        button.grid(
+        drink_frame = ttk.Frame(frame)
+        drink_frame.grid(
             row=row,
             column=column,
             padx=20,
-            pady=20,
-            ipadx=20,
-            ipady=20
+            pady=20
         )
 
+        drink_button = ttk.Button(
+            drink_frame,
+            text=f'{getraenk["name"]}\n{getraenk["preis"]:.2f} €',
+            width=30,
+            image=image,
+            compound=tk.TOP
+        )
 
-#PROGRAM
+        drink_button.image = image
+
+        drink_button.pack()
+
+        choose_button = ttk.Button(
+            drink_frame,
+            text="Wählen",
+            width=30
+        )
+
+        choose_button.pack(pady=(5, 0))
+
+
+# PROGRAM
 root = tk.Tk()
 root.title("Getränkeautomat")
-root.geometry("820x860")
+root.geometry("1200x900")
 
-#create frame
+# create main container
+main_frame = ttk.Frame(root)
+main_frame.pack(padx=20, pady=20)
+
+# create drink frame
 frame = ttk.Frame(
-    root,
-    borderwidth=2,
+    main_frame,
+    width=500,
+    height=800,
+    borderwidth=10,
     relief="solid",
     padding=10
 )
 
-frame.pack(padx=20, pady=20)
+frame.pack(side=tk.LEFT)
+frame.pack_propagate(False)
+
+# create side container
+side_frame = ttk.Frame(
+    main_frame,
+    width=500,
+    height=800,
+    borderwidth=10,
+    relief="solid",
+    padding=10
+)
+
+side_frame.pack(side=tk.LEFT, padx=(20, 20))
+side_frame.pack_propagate(False)
 
 getraenke = load_json()
 create_drink_buttons(getraenke)
