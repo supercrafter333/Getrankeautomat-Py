@@ -67,7 +67,8 @@ def create_drink_buttons(getraenke):
         choose_button = ttk.Button(
             drink_frame,
             text="Wählen",
-            width=30
+            width=30,
+            command=lambda: play_sound("yeah-yeah.wav")
         )
 
         choose_button.pack(pady=(5, 0))
