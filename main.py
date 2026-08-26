@@ -123,7 +123,6 @@ geldAnzeige.grid(row=0, column=0, sticky="w")
 test2 = ttk.Label(side_frame, text="Test")
 test2.grid(row=1, column=0, sticky="w")
 
-
 getraenke = load_json()
 create_drink_buttons(getraenke)
 
