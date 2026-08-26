@@ -34,6 +34,13 @@ def load_image(image_path):
 
     return image.subsample(4, 4)
 
+def choose_drink(getraenk):
+    play_sound("yeah-yeah.wav")
+    updatePriceDisplay(getraenk["preis"])
+
+def updatePriceDisplay(price):
+    print("Produkt preis", price)
+
 
 def create_drink_buttons(getraenke):
     for i, getraenk in enumerate(getraenke):
@@ -68,7 +75,7 @@ def create_drink_buttons(getraenke):
             drink_frame,
             text="Wählen",
             width=30,
-            command=lambda: play_sound("yeah-yeah.wav")
+            command=lambda g=getraenk: choose_drink(g)    
         )
 
         choose_button.pack(pady=(5, 0))
@@ -117,8 +124,6 @@ side_frame.grid_columnconfigure(0, weight=1)
 # Elemente in den 4 Zeilen platzieren
 geldAnzeige = ttk.Label(side_frame, text="Eingeworfener Betrag: 00,00€")
 geldAnzeige.grid(row=0, column=0, sticky="w")
-
-
 
 test2 = ttk.Label(side_frame, text="Test")
 test2.grid(row=1, column=0, sticky="w")
