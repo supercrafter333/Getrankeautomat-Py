@@ -93,13 +93,13 @@ main_frame = ttk.Frame(root)
 main_frame.pack(padx=20, pady=20)
 
 # create drink frame
-frame = ttk.Frame(
+frame = tk.Frame(
     main_frame,
-    width=500,
+    width=400,
     height=800,
-    borderwidth=10,
-    relief="solid",
-    padding=10
+    bg="#1f1f1f",
+    bd=12,
+    relief="ridge"
 )
 
 frame.pack(side=tk.LEFT)
@@ -131,7 +131,7 @@ paidAmount.grid(row=0, column=0, sticky="w")
 
 product = ttk.Label(
     side_frame,
-    text="Gewähltes Produkt: nothing"
+    text="Gewähltes Produkt: "
 )
 product.grid(row=1, column=0, sticky="w")
 
