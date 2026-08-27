@@ -36,9 +36,13 @@ def load_image(image_path):
 def choose_drink(getraenk):
     play_sound("yeah-yeah.wav")
     updatePriceDisplay(getraenk["preis"])
+    updateProductDisplay(getraenk["name"])
 
 def updatePriceDisplay(price):
     paidAmount.config(text=f"Zu zahlender Betrag: {price:.2f} €")
+
+def updateProductDisplay(name):
+    product.config(text=f"Gewähltes Produkt: {name}")
 
 def create_drink_buttons(getraenke):
     for i, getraenk in enumerate(getraenke):
@@ -114,21 +118,22 @@ side_frame = ttk.Frame(
 side_frame.pack(side=tk.LEFT, padx=(20, 20))
 side_frame.pack_propagate(False)
 
-# Grid mit 4 Zeilen konfigurieren (weight=1 sorgt für gleichmäßige Aufteilung)
+
 for row_idx in range(4):
     side_frame.grid_rowconfigure(row_idx, weight=1)
 side_frame.grid_columnconfigure(0, weight=1)
 
-# Elemente in den 4 Zeilen platzieren
 paidAmount = ttk.Label(
     side_frame,
     text="Zu zahlender Betrag: 0,00 €"
 )
 paidAmount.grid(row=0, column=0, sticky="w")
 
-
-test2 = ttk.Label(side_frame, text="Test")
-test2.grid(row=1, column=0, sticky="w")
+product = ttk.Label(
+    side_frame,
+    text="Gewähltes Produkt: nothing"
+)
+product.grid(row=1, column=0, sticky="w")
 
 getraenke = load_json()
 create_drink_buttons(getraenke)
