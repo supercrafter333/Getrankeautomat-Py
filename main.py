@@ -12,7 +12,6 @@ DATA_FILE = ROOT_DIR / "mock" / "daten.json"
 SOUNDS_DIR = ROOT_DIR / "sounds"
 
 
-
 #FUNCTIONS
 def play_sound(file_name):
     sound_path = SOUNDS_DIR / file_name
@@ -39,8 +38,7 @@ def choose_drink(getraenk):
     updatePriceDisplay(getraenk["preis"])
 
 def updatePriceDisplay(price):
-    print("Produkt preis", price)
-
+    paidAmount.config(text=f"Zu zahlender Betrag: {price:.2f} €")
 
 def create_drink_buttons(getraenke):
     for i, getraenk in enumerate(getraenke):
@@ -122,8 +120,12 @@ for row_idx in range(4):
 side_frame.grid_columnconfigure(0, weight=1)
 
 # Elemente in den 4 Zeilen platzieren
-geldAnzeige = ttk.Label(side_frame, text="Eingeworfener Betrag: 00,00€")
-geldAnzeige.grid(row=0, column=0, sticky="w")
+paidAmount = ttk.Label(
+    side_frame,
+    text="Zu zahlender Betrag: 0,00 €"
+)
+paidAmount.grid(row=0, column=0, sticky="w")
+
 
 test2 = ttk.Label(side_frame, text="Test")
 test2.grid(row=1, column=0, sticky="w")
