@@ -15,6 +15,7 @@ FARBE_SCHEIN = "#d5e8d0"
 FARBE_ABBRECHEN = "#f4c7c3"
 FARBE_GEWAEHLT = "#fff2b3"
 FARBE_DISPLAY = "#dff0d8"
+TEXTFARBE = "#1a1a1a"
 ZEILE_NORMAL = 44
 ZEILE_MIN = 26
 
@@ -263,7 +264,7 @@ class KundenAnsicht:
         hoehe = canvas.winfo_height()
         if not e.geld:
             canvas.create_text(10, hoehe // 2, anchor="w", text="Kein Rückgeld",
-                               font=("Helvetica", 12))
+                               font=("Helvetica", 12), fill=TEXTFARBE)
             return
         art = dict(self._geldsorten)
         sorten = sorted(e.geld, reverse=True)
@@ -283,11 +284,13 @@ class KundenAnsicht:
                 canvas.create_oval(symbol_mitte - symbol_h / 2, y - symbol_h / 2,
                                    symbol_mitte + symbol_h / 2, y + symbol_h / 2,
                                    fill=FARBE_MUENZE, outline="#a58a3c")
-            canvas.create_text(symbol_mitte, y, text=geld_text(wert), font=symbol_schrift)
+            canvas.create_text(symbol_mitte, y, text=geld_text(wert), font=symbol_schrift,
+                               fill=TEXTFARBE)
             canvas.create_text(symbol_mitte + 50, y, anchor="w", text=f"{anzahl} Stück",
-                               font=("Helvetica", 14, "bold"))
+                               font=("Helvetica", 14, "bold"), fill=TEXTFARBE)
             canvas.create_text(breite - 10, y, anchor="e",
-                               text=format_euro(wert * anzahl), font=("Helvetica", 12))
+                               text=format_euro(wert * anzahl), font=("Helvetica", 12),
+                               fill=TEXTFARBE)
 
     def _canvas_geaendert(self, _ereignis=None):
         """Zeichnet das Ausgabefach bei Größenänderung neu."""
