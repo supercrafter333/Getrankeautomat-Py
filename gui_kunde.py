@@ -15,6 +15,8 @@ FARBE_SCHEIN = "#d5e8d0"
 FARBE_ABBRECHEN = "#f4c7c3"
 FARBE_GEWAEHLT = "#fff2b3"
 FARBE_DISPLAY = "#dff0d8"
+ZEILE_NORMAL = 44
+ZEILE_MIN = 26
 
 
 def geld_text(wert: int) -> str:
@@ -127,7 +129,7 @@ class KundenAnsicht:
         rahmen = ttk.LabelFrame(eltern, text="Ausgabefach", padding=8)
         rahmen.grid(row=2, column=0, sticky="nsew")
         rahmen.columnconfigure(1, weight=1)
-        rahmen.rowconfigure(1, weight=1)
+        rahmen.rowconfigure(1, weight=1, minsize=130)
 
         links = ttk.Frame(rahmen)
         links.grid(row=0, column=0, rowspan=3, sticky="n", padx=(0, 10))
@@ -141,6 +143,7 @@ class KundenAnsicht:
         self._canvas = tk.Canvas(rahmen, height=110, background="white",
                                  highlightthickness=1, highlightbackground="#bbbbbb")
         self._canvas.grid(row=1, column=1, sticky="nsew", pady=6)
+        self._canvas.bind("<Configure>", self._canvas_geaendert)
         self._entnehmen_knopf = ttk.Button(rahmen, text="Entnehmen",
                                            command=self._entnehmen_geklickt)
         self._entnehmen_knopf.grid(row=2, column=1, sticky="ew")
@@ -254,26 +257,44 @@ class KundenAnsicht:
         self._entnehmen_knopf.state(["!disabled"])
 
     def _geld_zeichnen(self, e: Kaufergebnis):
-        """Zeichnet jede Geldsorte mit Wert und Anzahl, von groß nach klein."""
+        """Zeichnet je Geldsorte eine Zeile mit Symbol, Anzahl und Teilsumme, von groß nach klein."""
+        canvas = self._canvas
+        breite = canvas.winfo_width()
+        hoehe = canvas.winfo_height()
         if not e.geld:
-            self._canvas.create_text(10, 55, anchor="w", text="Kein Rückgeld",
-                                     font=("Helvetica", 12))
+            canvas.create_text(10, hoehe // 2, anchor="w", text="Kein Rückgeld",
+                               font=("Helvetica", 12))
             return
         art = dict(self._geldsorten)
-        x = 10
-        for wert in sorted(e.geld, reverse=True):
+        sorten = sorted(e.geld, reverse=True)
+        zeile_h = max(ZEILE_MIN, min(ZEILE_NORMAL, hoehe // len(sorten)))
+        symbol_h = zeile_h - 6
+        symbol_schrift = ("Helvetica", 11 if zeile_h >= 36 else 9, "bold")
+        symbol_mitte = 10 + 35
+        for i, wert in enumerate(sorten):
             anzahl = e.geld[wert]
-            mitte = x + 40
+            y = i * zeile_h + zeile_h / 2
             if art.get(wert) == "Schein":
-                self._canvas.create_rectangle(mitte - 38, 20, mitte + 38, 62,
-                                              fill=FARBE_SCHEIN, outline="#6a8f66")
+                halb_b = max(symbol_h * 1.7 / 2, 18)
+                canvas.create_rectangle(symbol_mitte - halb_b, y - symbol_h / 2,
+                                        symbol_mitte + halb_b, y + symbol_h / 2,
+                                        fill=FARBE_SCHEIN, outline="#6a8f66")
             else:
-                self._canvas.create_oval(mitte - 25, 12, mitte + 25, 62,
-                                         fill=FARBE_MUENZE, outline="#a58a3c")
-            self._canvas.create_text(mitte, 41, text=geld_text(wert),
-                                     font=("Helvetica", 11, "bold"))
-            self._canvas.create_text(mitte, 82, text=f"× {anzahl}", font=("Helvetica", 11))
-            x += 88
+                canvas.create_oval(symbol_mitte - symbol_h / 2, y - symbol_h / 2,
+                                   symbol_mitte + symbol_h / 2, y + symbol_h / 2,
+                                   fill=FARBE_MUENZE, outline="#a58a3c")
+            canvas.create_text(symbol_mitte, y, text=geld_text(wert), font=symbol_schrift)
+            canvas.create_text(symbol_mitte + 50, y, anchor="w", text=f"{anzahl} Stück",
+                               font=("Helvetica", 14, "bold"))
+            canvas.create_text(breite - 10, y, anchor="e",
+                               text=format_euro(wert * anzahl), font=("Helvetica", 12))
+
+    def _canvas_geaendert(self, _ereignis=None):
+        """Zeichnet das Ausgabefach bei Größenänderung neu."""
+        if self.automat.zustand != Zustand.AUSGABE or self._ergebnis is None:
+            return
+        self._canvas.delete("all")
+        self._geld_zeichnen(self._ergebnis)
 
     # ---------- Ereignisse ----------
 
