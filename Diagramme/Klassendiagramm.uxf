@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level>
+<element><id>Text</id><coordinates><x>40</x><y>10</y><w>700</w><h>35</h></coordinates><panel_attributes>*Klassendiagramm: Getränkeautomat*
+fontsize=18</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLPackage</id><coordinates><x>40</x><y>60</y><w>1300</w><h>310</h></coordinates><panel_attributes>Oberfläche
+layer=-1</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLPackage</id><coordinates><x>40</x><y>410</y><w>1300</w><h>350</h></coordinates><panel_attributes>Logik
+layer=-1</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLPackage</id><coordinates><x>40</x><y>800</y><w>1300</w><h>440</h></coordinates><panel_attributes>Datenhaltung
+layer=-1</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>60</x><y>110</y><w>180</w><h>80</h></coordinates><panel_attributes>*main.py*
+&lt;&lt;Start&gt;&gt;
+--
++ main()</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>Text</id><coordinates><x>60</x><y>200</y><w>200</w><h>60</h></coordinates><panel_attributes>erzeugt Datenbank,
+Automat und
+KundenAnsicht</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>300</x><y>110</y><w>320</w><h>230</h></coordinates><panel_attributes>*KundenAnsicht*
+&lt;&lt;gui_kunde.py&gt;&gt;
+--
+- root: tk.Tk
+- automat: Automat
+--
++ KundenAnsicht(root, automat, db)
++ aktualisieren()
+- getraenk_geklickt(fach)
+- geld_geklickt(wert)
+- abbrechen_geklickt()
+- entnehmen_geklickt()
+- service_geklickt()</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>680</x><y>110</y><w>220</w><h>100</h></coordinates><panel_attributes>*PinDialog*
+&lt;&lt;gui_techniker.py&gt;&gt;
+--
++ PinDialog(parent)
++ ergebnis(): bool</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>960</x><y>110</y><w>360</w><h>230</h></coordinates><panel_attributes>*TechnikerFenster*
+&lt;&lt;gui_techniker.py&gt;&gt;
+--
+- db: Datenbank
+- bei_aenderung: Callable
+--
++ TechnikerFenster(parent, db, bei_aenderung)
+- reiter_getraenke()
+- reiter_wechselgeld()
+- reiter_einnahmen()
+- reiter_statistik()
+- reiter_csv()</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>60</x><y>460</y><w>180</w><h>120</h></coordinates><panel_attributes>*Zustand*
+&lt;&lt;Enum&gt;&gt;
+--
+BEREIT
+GEWAEHLT
+AUSGABE</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>60</x><y>610</y><w>200</w><h>130</h></coordinates><panel_attributes>*Kaufergebnis*
+&lt;&lt;dataclass&gt;&gt;
+--
++ verkauft: bool
++ getraenk: Getraenk
++ geld: dict
++ meldung: str</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>300</x><y>460</y><w>320</w><h>270</h></coordinates><panel_attributes>*Automat*
+&lt;&lt;logik.py&gt;&gt;
+--
+- db: Datenbank
++ zustand: Zustand
++ gewaehlt: Getraenk
++ zwischenspeicher: dict
+--
++ Automat(db)
++ getraenke(): list[Getraenk]
++ waehlen(fach)
++ einwerfen(wert): Kaufergebnis
++ abbrechen(): Kaufergebnis
++ entnehmen()
++ eingeworfen(): int
++ restbetrag(): int</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>680</x><y>460</y><w>310</w><h>150</h></coordinates><panel_attributes>*logik.py*
+&lt;&lt;Funktionen&gt;&gt;
+--
++ TECHNIKER_PIN: str
+--
++ berechne_rueckgeld(betrag, bestand): dict
++ format_euro(cent): str
++ parse_euro(text): int
++ pin_pruefen(eingabe): bool</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLNote</id><coordinates><x>1120</x><y>460</y><w>200</w><h>230</h></coordinates><panel_attributes>*Legende*
+durchgezogener Pfeil:
+kennt bzw. nutzt
+gestrichelter Pfeil:
+erzeugt bzw. ruft auf
+
+Alle Beträge in Cent
+(int). Umrechnung in
+Euro nur für Anzeige
+und CSV.</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>60</x><y>850</y><w>200</w><h>220</h></coordinates><panel_attributes>*Getraenk*
+&lt;&lt;dataclass&gt;&gt;
+--
++ id: int
++ fach: int
++ name: str
++ preis_cent: int
++ bestand: int
++ kapazitaet: int
++ bild: str
+--
++ ausverkauft(): bool</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>300</x><y>850</y><w>360</w><h>370</h></coordinates><panel_attributes>*Datenbank*
+&lt;&lt;datenbank.py&gt;&gt;
+--
+- verbindung: sqlite3.Connection
+--
++ Datenbank(pfad)
++ geldsorten(): list
++ getraenke(): list[Getraenk]
++ wechselgeld(): dict
++ wechselgeld_tabelle(): list
++ einzahlung(): dict
++ verkaeufe(): list
++ statistik(von, bis): list
++ kauf_buchen(getraenk, eingeworfen, rueckgeld)
++ fach_auffuellen(fach)
++ alle_auffuellen()
++ wechselgeld_auffuellen()
++ einnahmen_leeren()
++ getraenke_importieren(liste)
++ wechselgeld_setzen(zeilen)
++ einzahlung_setzen(bestand)</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>720</x><y>850</y><w>300</w><h>180</h></coordinates><panel_attributes>*csv_io.py*
+&lt;&lt;Funktionen&gt;&gt;
+--
++ export_getraenke(db, pfad)
++ export_wechselgeld(db, pfad)
++ export_einzahlung(db, pfad)
++ export_verkaeufe(db, pfad)
++ import_getraenke(db, pfad)
++ import_wechselgeld(db, pfad)
++ import_einzahlung(db, pfad)</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLClass</id><coordinates><x>720</x><y>1080</y><w>200</w><h>100</h></coordinates><panel_attributes>*ImportFehler*
+&lt;&lt;Exception&gt;&gt;
+--
++ zeile: int
++ grund: str</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>UMLNote</id><coordinates><x>1060</x><y>850</y><w>260</w><h>110</h></coordinates><panel_attributes>*Dateien*
+schema.sql: Tabellen
+startdaten.sql: Startbestand
+automat.db: wird beim ersten
+Start angelegt, nicht im Repo</panel_attributes><additional_attributes></additional_attributes></element>
+<element><id>Relation</id><coordinates><x>230</x><y>140</y><w>80</w><h>20</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>10;10;70;10</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>610</x><y>120</y><w>200</w><h>50</h></coordinates><panel_attributes>lt=.&gt;
+öffnet</panel_attributes><additional_attributes>10;40;70;40</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>610</x><y>260</y><w>480</w><h>50</h></coordinates><panel_attributes>lt=.&gt;
+öffnet</panel_attributes><additional_attributes>10;40;350;40</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>450</x><y>330</y><w>20</w><h>140</h></coordinates><panel_attributes>lt=-&gt;</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>450</x><y>720</y><w>20</w><h>140</h></coordinates><panel_attributes>lt=-&gt;</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>630</x><y>330</y><w>390</w><h>530</h></coordinates><panel_attributes>lt=-&gt;</panel_attributes><additional_attributes>380;10;380;450;10;450;10;520</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>890</x><y>330</y><w>170</w><h>530</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>160;10;160;490;10;490;10;520</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>650</x><y>930</y><w>80</w><h>20</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>70;10;10;10</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>860</x><y>990</y><w>140</w><h>100</h></coordinates><panel_attributes>lt=.&gt;
+wirft</panel_attributes><additional_attributes>10;40;10;90</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>250</x><y>950</y><w>60</w><h>20</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>50;10;10;10</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>230</x><y>510</y><w>80</w><h>20</h></coordinates><panel_attributes>lt=-&gt;</panel_attributes><additional_attributes>70;10;10;10</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>250</x><y>660</y><w>60</w><h>20</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>50;10;10;10</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>610</x><y>520</y><w>80</w><h>20</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>10;10;70;10</additional_attributes></element>
+<element><id>Relation</id><coordinates><x>150</x><y>730</y><w>20</w><h>130</h></coordinates><panel_attributes>lt=-&gt;</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element>
+</diagram>
