@@ -202,8 +202,10 @@ class TechnikerFenster(tk.Toplevel):
         for text, art in arten[:3]:
             ttk.Button(importe, text=text, command=lambda a=art: self._import_geklickt(a)).pack(
                 side="left", padx=(0, 8))
-        ttk.Label(seite, text="Aus Excel als ‚CSV UTF-8 (durch Trennzeichen getrennt)‘ "
-                              "speichern.").grid(row=2, column=0, sticky="w", pady=(10, 0))
+        ttk.Label(seite, justify="left",
+                  text="In Excel öffnen: Daten → Aus Text/CSV, Trennzeichen Semikolon.\n"
+                       "Aus Excel speichern: als ‚CSV UTF-8 (durch Trennzeichen getrennt)‘."
+                  ).grid(row=2, column=0, sticky="w", pady=(10, 0))
 
     # ---------- Tabellen ----------
 
@@ -316,7 +318,13 @@ class TechnikerFenster(tk.Toplevel):
             filetypes=CSV_TYPEN)
         if not pfad:
             return
-        EXPORTE[art](self.db, pfad)
+        try:
+            EXPORTE[art](self.db, pfad)
+        except OSError as fehler:
+            messagebox.showerror(
+                "Export", f"Die Datei konnte nicht gespeichert werden:\n{fehler.strerror or fehler}",
+                parent=self)
+            return
         messagebox.showinfo("Export", f"Gespeichert: {pfad}", parent=self)
 
     def _import_geklickt(self, art: str):
